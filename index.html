@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>الرئيسية — الطريقة البيومية الأحمدية</title>
+
+    <!-- Google Fonts (Amiri + others in one request) -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Noto+Serif:wght@400;700&family=Source+Serif+4:ital,wght@0,400;1,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Material Symbols (load once) -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+    <!-- Tailwind config (CDN) -->
+    <script>
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              "background":                "#111412",
+              "on-background":             "#e2e3df",
+              "surface":                   "#111412",
+              "surface-dim":               "#111412",
+              "surface-bright":            "#373a37",
+              "surface-container-lowest":  "#0c0f0d",
+              "surface-container-low":     "#1a1c1a",
+              "surface-container":         "#1e201e",
+              "surface-container-high":    "#282b28",
+              "surface-container-highest": "#333533",
+              "surface-variant":           "#333533",
+              "on-surface":                "#e2e3df",
+              "on-surface-variant":        "#c4c6cc",
+              "inverse-surface":           "#e2e3df",
+              "inverse-on-surface":        "#2f312e",
+              "outline":                   "#8e9196",
+              "outline-variant":           "#44474c",
+              "primary":                   "#bac8dc",
+              "on-primary":                "#243141",
+              "primary-container":         "#0d1b2a",
+              "on-primary-container":      "#768497",
+              "secondary":                 "#e6c364",
+              "on-secondary":              "#3d2e00",
+              "secondary-container":       "#785d00",
+              "on-secondary-container":    "#fdd977",
+            },
+            borderRadius: { DEFAULT: '0.125rem', lg: '0.25rem', xl: '0.5rem', full: '0.75rem' },
+            spacing: { 'margin-mobile': '16px', 'gutter': '24px', 'container-max': '1200px', 'margin-desktop': '64px', 'unit':'8px' },
+            fontFamily: {
+              'display-lg': ['Amiri','serif'],
+              'headline-lg': ["'Noto Serif'", 'serif'],
+              'body-lg': ["'Source Serif 4'", 'serif'],
+              'label-sm': ["'Source Sans 3'", 'sans-serif']
+            },
+            fontSize: {
+              'display-lg': ['48px',{lineHeight:'1.2',fontWeight:'700',letterSpacing:'-0.02em'}],
+              'headline-lg': ['32px',{lineHeight:'1.3',fontWeight:'600'}],
+              'body-lg': ['18px',{lineHeight:'1.8',fontWeight:'400'}]
+            }
+          }
+        }
+      }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Shared CSS -->
+    <link rel="stylesheet" href="/al-bayoumiyya/components/layout.css">
+
+    <style>
+      /* Reserve sidebar space to avoid FOUC */
+      #sidebar-container { min-width: 256px; }
+      @media (min-width: 768px) { .md\:mr-64 { margin-right: 256px; } }
+    </style>
+  </head>
+  <body class="dark bg-background custom-scrollbar" data-page="home">
+
+    <!-- Sidebar will be injected here -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main content (give room for sidebar on desktop) -->
+    <main class="md:mr-64 min-h-screen p-8 container mx-auto">
+      <section id="hero-wird-card" class="pattern-bg p-8 rounded-xl animate-fade-in-up">
+        <h1 id="hero-wird-text" class="text-display-lg text-on-background font-amiri">... جاري التحميل</h1>
+        <p id="hero-wird-description" class="mt-4 text-body-lg text-on-surface-variant">جاري التحميل...</p>
+        <div class="mt-6 flex gap-4">
+          <button id="hero-listen-btn" class="px-6 py-3 bg-secondary text-on-secondary rounded-lg hover-gold-glow flex items-center gap-2">
+            <span class="material-symbols-outlined">play_circle</span>
+            استمع للورد
+          </button>
+          <button id="hero-read-btn" class="px-6 py-3 border border-outline rounded-lg flex items-center gap-2">
+            <span class="material-symbols-outlined">menu_book</span>
+            اقرأ الورد
+          </button>
+        </div>
+      </section>
+
+      <section class="mt-12">
+        <h2 class="text-headline-lg">أحدث الإضافات</h2>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <a href="/al-bayoumiyya/audio.html" class="block p-4 bg-surface-container rounded-lg glass-panel">بطاقة صوتية — قصيدة البردة</a>
+          <a href="/al-bayoumiyya/videos.html" class="block p-4 bg-surface-container rounded-lg glass-panel">فيديو — مجلس الذكر الأسبوعي</a>
+          <a href="/al-bayoumiyya/awrad.html" class="block p-4 bg-surface-container rounded-lg glass-panel">ورد — الورد الأساسي للطريقة</a>
+        </div>
+        <div class="mt-4 text-sm">
+          <a href="/al-bayoumiyya/audio.html" class="mr-4">عرض كل الصوتيات</a>
+          <a href="/al-bayoumiyya/videos.html">عرض كل الفيديوهات</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- Mobile bottom nav -->
+    <div id="mobile-nav-container"></div>
+
+    <!-- Footer -->
+    <div id="footer-container" class="mt-12"></div>
+
+    <!-- Shared layout script -->
+    <script src="/al-bayoumiyya/components/layout.js"></script>
+    <script src="/al-bayoumiyya/components/daily-wird.js"></script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+/* ── Noor Al-Tareeq — Shared CSS ── */
+
+/* Pattern background (homepage hero) */
+.pattern-bg {
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(230,195,100,0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(230,195,100,0.03) 0%, transparent 30%);
+}
+
+/* Gold glow — used on sidebar logo, featured cards, CTA buttons */
+.gold-glow {
+  box-shadow: 0 0 15px rgba(230,195,100,0.15);
+}
+.hover-gold-glow:hover {
+  box-shadow: 0 0 25px rgba(230,195,100,0.30);
+}
+
+/* Scrollbar — golden thin bar (global) */
+.custom-scrollbar::-webkit-scrollbar        { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track  { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb  { background-color: #e6c364; border-radius: 10px; }
+
+/* Fade-in animation (hero section) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+  opacity: 0;
+}
+
+/* Glass panel (admin dashboard cards) */
+.glass-panel {
+  background: rgba(30, 32, 30, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* iOS safe area padding for bottom nav */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+/* Amiri font utility class للنصوص الدينية */
+.font-amiri { font-family: 'Amiri', serif; }

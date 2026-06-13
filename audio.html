@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>الصوتيات — الطريقة البيومية الأحمدية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Noto+Serif:wght@400;700&family=Source+Serif+4:ital,wght@0,400;1,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+      window.tailwind = window.tailwind || {};
+      window.tailwind.config = window.tailwind.config || {};
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/al-bayoumiyya/components/layout.css">
+    <style>#sidebar-container { min-width: 256px; } @media (min-width: 768px) { .md\:mr-64 { margin-right: 256px; } }</style>
+  </head>
+  <body class="dark bg-background custom-scrollbar" data-page="audio">
+    <div id="sidebar-container"></div>
+    <main class="md:mr-64 min-h-screen p-8 container mx-auto">
+      <section class="mb-8">
+        <h1 class="text-display-lg font-amiri">المكتبة الصوتية</h1>
+        <p class="mt-4 text-on-surface-variant">استمع إلى التسجيلات والأناشيد والقصائد.</p>
+      </section>
+
+      <section class="mb-8">
+        <div class="flex flex-wrap gap-3" data-filter-group="audio">
+          <button data-filter="كل" class="px-4 py-2 border border-outline-variant rounded-lg bg-secondary text-on-secondary">كل</button>
+          <button data-filter="أذكار" class="px-4 py-2 border border-outline-variant rounded-lg">أذكار</button>
+          <button data-filter="قصائد" class="px-4 py-2 border border-outline-variant rounded-lg">قصائد</button>
+          <button data-filter="إنشاد" class="px-4 py-2 border border-outline-variant rounded-lg">إنشاد</button>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-6" data-filter-target="audio">
+        <article data-track-id="track-burdah" data-category="قصائد" data-src="/al-bayoumiyya/assets/audio/burdah-tihami.mp3" data-title="قصيدة البردة الشريفة كاملة" data-artist="المنشد محمود ياسين التهامي" data-duration="45:20" data-thumbnail="/al-bayoumiyya/assets/images/thumb-burdah.jpg" class="p-4 bg-surface-container rounded-lg border border-outline-variant">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="font-semibold">قصيدة البردة الشريفة كاملة</h2>
+              <p class="text-sm text-on-surface-variant mt-2">المنشد محمود ياسين التهامي</p>
+            </div>
+            <span class="text-sm text-on-surface-variant">45:20</span>
+          </div>
+          <button class="mt-6 play-track-btn px-4 py-2 bg-secondary text-on-secondary rounded-lg flex items-center gap-2"><span class="material-symbols-outlined">play_circle</span>استماع</button>
+        </article>
+
+        <article data-track-id="track-wird-asasi" data-category="أذكار" data-src="/al-bayoumiyya/assets/audio/wird-asasi.mp3" data-title="الورد الأساسي للطريقة" data-artist="الشيخ أحمد البيومي" data-duration="45:20" class="p-4 bg-surface-container rounded-lg border border-outline-variant">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="font-semibold">الورد الأساسي للطريقة</h2>
+              <p class="text-sm text-on-surface-variant mt-2">الشيخ أحمد البيومي</p>
+            </div>
+            <span class="text-sm text-on-surface-variant">45:20</span>
+          </div>
+          <button class="mt-6 play-track-btn px-4 py-2 bg-secondary text-on-secondary rounded-lg flex items-center gap-2"><span class="material-symbols-outlined">play_circle</span>استماع</button>
+        </article>
+
+        <article data-track-id="track-nabi-salam" data-category="إنشاد" data-src="/al-bayoumiyya/assets/audio/nabi-salam.mp3" data-title="يا نبي سلام عليك" data-artist="فرقة الرضوان" data-duration="12:05" class="p-4 bg-surface-container rounded-lg border border-outline-variant">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="font-semibold">يا نبي سلام عليك</h2>
+              <p class="text-sm text-on-surface-variant mt-2">فرقة الرضوان</p>
+            </div>
+            <span class="text-sm text-on-surface-variant">12:05</span>
+          </div>
+          <button class="mt-6 play-track-btn px-4 py-2 bg-secondary text-on-secondary rounded-lg flex items-center gap-2"><span class="material-symbols-outlined">play_circle</span>استماع</button>
+        </article>
+
+        <article data-track-id="track-majlis-dhikr" data-category="أذكار" data-src="/al-bayoumiyya/assets/audio/majlis-dhikr.mp3" data-title="مجلس الذكر الأسبوعي" data-artist="الزاوية الرئيسية" data-duration="28:30" class="p-4 bg-surface-container rounded-lg border border-outline-variant">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="font-semibold">مجلس الذكر الأسبوعي</h2>
+              <p class="text-sm text-on-surface-variant mt-2">الزاوية الرئيسية</p>
+            </div>
+            <span class="text-sm text-on-surface-variant">28:30</span>
+          </div>
+          <button class="mt-6 play-track-btn px-4 py-2 bg-secondary text-on-secondary rounded-lg flex items-center gap-2"><span class="material-symbols-outlined">play_circle</span>استماع</button>
+        </article>
+      </section>
+
+      <section id="audio-player-bar" class="fixed bottom-16 left-0 right-0 bg-surface-container border-t border-outline p-4 hidden">
+        <audio id="app-audio"></audio>
+        <div class="flex items-center gap-4">
+          <button id="player-prev-btn" class="material-symbols-outlined">skip_previous</button>
+          <button id="player-play-btn" class="material-symbols-outlined flex items-center justify-center w-12 h-12 rounded-full bg-secondary text-on-secondary"><span id="player-play-icon">play_arrow</span></button>
+          <button id="player-next-btn" class="material-symbols-outlined">skip_next</button>
+          <div class="flex-1">
+            <div id="player-title" class="font-semibold"></div>
+            <div id="player-artist" class="text-sm text-on-surface-variant"></div>
+            <div id="player-progress-container" class="relative h-2 bg-surface-dark rounded-full mt-3 cursor-pointer">
+              <div id="player-progress-fill" class="absolute inset-y-0 right-0 bg-secondary rounded-full" style="width:0%"></div>
+            </div>
+            <div class="mt-2 text-xs flex justify-between text-on-surface-variant">
+              <span id="player-current-time">0:00</span>
+              <span id="player-total-time">0:00</span>
+            </div>
+          </div>
+          <div class="w-24">
+            <div id="player-volume-container" class="relative h-2 bg-surface-dark rounded-full cursor-pointer">
+              <div id="player-volume-fill" class="absolute inset-y-0 right-0 bg-secondary rounded-full" style="width:80%"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div id="mobile-nav-container"></div>
+    <div id="footer-container"></div>
+    <script src="/al-bayoumiyya/components/layout.js"></script>
+    <script src="/al-bayoumiyya/components/filter.js"></script>
+    <script src="/al-bayoumiyya/components/audio-player.js"></script>
+  </body>
+</html>
