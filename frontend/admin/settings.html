@@ -1,0 +1,67 @@
+<!doctype html><html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>الإعدادات — لوحة التحكم</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <script src="/components/tailwind.config.js"></script><script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/components/layout.css">
+  <style>#sidebar-container{min-width:256px}@media(min-width:768px){.md\:mr-64{margin-right:256px}}.ai{width:100%;background:#111412;border:1px solid #44474c;border-radius:.5rem;padding:.75rem 1rem;color:#e2e3df;outline:none}.ai:focus{border-color:#e6c364}</style>
+</head>
+<body class="dark bg-background text-on-background custom-scrollbar" data-page="admin-settings">
+  <div id="sidebar-container" data-mode="admin"></div>
+  <div class="md:mr-64 min-h-screen p-6 md:p-10 max-w-2xl">
+    <div class="mb-8"><h1 class="font-amiri text-3xl">الإعدادات</h1><p class="text-on-surface-variant text-sm mt-1">إعدادات الحساب والموقع</p></div>
+
+    <!-- Change Password -->
+    <div class="bg-surface-container rounded-2xl border border-outline-variant p-6 mb-6">
+      <h2 class="font-semibold text-on-surface mb-5 flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary">lock</span> تغيير كلمة المرور
+      </h2>
+      <form id="pw-form" class="flex flex-col gap-4">
+        <div><label class="text-sm text-on-surface-variant mb-1 block">كلمة المرور الحالية</label><input id="pw-current" type="password" class="ai"></div>
+        <div><label class="text-sm text-on-surface-variant mb-1 block">كلمة المرور الجديدة</label><input id="pw-new" type="password" class="ai"></div>
+        <div><label class="text-sm text-on-surface-variant mb-1 block">تأكيد كلمة المرور</label><input id="pw-confirm" type="password" class="ai"></div>
+        <div id="pw-error" class="hidden text-error text-sm bg-error-container/20 border border-error/30 rounded-xl px-4 py-3"></div>
+        <button type="submit" class="py-3 bg-secondary text-on-secondary rounded-xl font-semibold hover-gold-glow">حفظ كلمة المرور</button>
+      </form>
+    </div>
+
+    <!-- Account Info -->
+    <div class="bg-surface-container rounded-2xl border border-outline-variant p-6">
+      <h2 class="font-semibold text-on-surface mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-secondary">manage_accounts</span> معلومات الحساب
+      </h2>
+      <div class="text-sm text-on-surface-variant space-y-2">
+        <div class="flex justify-between"><span>الاسم:</span><span class="text-on-surface" id="info-name">—</span></div>
+        <div class="flex justify-between"><span>اسم المستخدم:</span><span class="text-on-surface" id="info-username">—</span></div>
+      </div>
+      <button onclick="adminLogout()" class="mt-6 w-full py-3 border border-error/40 text-error rounded-xl hover:bg-error-container/20 transition-colors flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-sm">logout</span> تسجيل الخروج
+      </button>
+    </div>
+  </div>
+
+  <script src="/components/layout.js"></script>
+  <script>
+  const token=()=>localStorage.getItem('bayoumiyya_token');
+  const authH=()=>({Authorization:`Bearer ${token()}`,'Content-Type':'application/json'});
+  document.getElementById('info-name').textContent=localStorage.getItem('bayoumiyya_name')||'—';
+  fetch('/api/auth/me',{headers:authH()}).then(r=>r.json()).then(d=>{document.getElementById('info-username').textContent=d.username||'—';}).catch(()=>{});
+  document.getElementById('pw-form').onsubmit=async e=>{
+    e.preventDefault();
+    const errEl=document.getElementById('pw-error');errEl.classList.add('hidden');
+    const cur=document.getElementById('pw-current').value;
+    const nw=document.getElementById('pw-new').value;
+    const conf=document.getElementById('pw-confirm').value;
+    if(nw!==conf){errEl.textContent='كلمتا المرور غير متطابقتين';errEl.classList.remove('hidden');return;}
+    try{
+      const res=await fetch('/api/auth/password',{method:'PUT',headers:authH(),body:JSON.stringify({current:cur,next:nw})});
+      const d=await res.json();
+      if(!res.ok)throw new Error(d.error||'خطأ');
+      e.target.reset();showToast('تم تغيير كلمة المرور ✓');
+    }catch(err){errEl.textContent=err.message;errEl.classList.remove('hidden');}
+  };
+  function showToast(m,t='success'){const el=document.createElement('div');el.className=`fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-full text-sm shadow-lg ${t==='error'?'bg-error-container text-on-error-container':'bg-secondary text-on-secondary'}`;el.textContent=m;document.body.appendChild(el);setTimeout(()=>el.remove(),3000);}
+  </script>
+</body></html>

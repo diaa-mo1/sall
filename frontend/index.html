@@ -1,0 +1,135 @@
+<!doctype html><html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>الرئيسية — الطريقة البيومية الأحمدية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Serif:wght@400;700&family=Source+Serif+4:wght@400;600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <script src="/components/tailwind.config.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/components/layout.css">
+  <style>#sidebar-container{min-width:256px}@media(min-width:768px){.md\:mr-64{margin-right:256px}}</style>
+</head>
+<body class="dark bg-background text-on-background custom-scrollbar" data-page="home">
+  <div id="sidebar-container"></div>
+  <div class="md:mr-64 min-h-screen flex flex-col">
+    <main class="flex-1 p-6 md:p-10 max-w-5xl w-full mx-auto">
+
+      <!-- Hero — ورد اليوم -->
+      <section class="pattern-bg rounded-2xl p-8 md:p-12 mb-12 border border-secondary/20 animate-fade-in-up">
+        <div class="inline-block px-4 py-1 rounded-full bg-secondary/10 border border-secondary/30 text-secondary text-sm mb-6">
+          <span class="material-symbols-outlined text-sm align-middle">wb_sunny</span> ورد اليوم
+        </div>
+        <h1 id="hero-wird-text" class="font-amiri text-3xl md:text-5xl text-secondary leading-relaxed mb-4">
+          جاري التحميل...
+        </h1>
+        <p id="hero-wird-description" class="text-on-surface-variant text-lg mb-8 leading-relaxed max-w-2xl">
+          جاري التحميل...
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <button id="hero-listen-btn"
+            class="flex items-center gap-2 px-6 py-3 bg-secondary text-on-secondary rounded-xl font-semibold hover-gold-glow transition-all">
+            <span class="material-symbols-outlined">play_circle</span> استمع للورد
+          </button>
+          <button id="hero-read-btn"
+            class="flex items-center gap-2 px-6 py-3 border border-outline-variant rounded-xl hover:border-secondary hover:text-secondary transition-colors">
+            <span class="material-symbols-outlined">menu_book</span> اقرأ الورد
+          </button>
+        </div>
+      </section>
+
+      <!-- أحدث الإضافات -->
+      <section>
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="font-amiri text-2xl text-on-surface">أحدث الإضافات</h2>
+        </div>
+        <div id="latest-grid" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Filled by JS -->
+          <div class="p-5 bg-surface-container rounded-xl animate-pulse h-32"></div>
+          <div class="p-5 bg-surface-container rounded-xl animate-pulse h-32"></div>
+          <div class="p-5 bg-surface-container rounded-xl animate-pulse h-32"></div>
+        </div>
+        <div class="mt-6 flex gap-6 text-sm">
+          <a href="/audio.html" class="text-secondary hover:underline flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">audiotrack</span> كل الصوتيات
+          </a>
+          <a href="/videos.html" class="text-secondary hover:underline flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">videocam</span> كل الفيديوهات
+          </a>
+          <a href="/awrad.html" class="text-secondary hover:underline flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">menu_book</span> كل الأوراد
+          </a>
+        </div>
+      </section>
+    </main>
+    <div id="footer-container"></div>
+  </div>
+  <div id="mobile-nav-container"></div>
+
+  <script src="/components/layout.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Load daily wird
+    try {
+      const wird = await API.get('/settings/daily-wird');
+      if (wird) {
+        document.getElementById('hero-wird-text').textContent = wird.text?.split('\n')[0] || wird.title;
+        document.getElementById('hero-wird-description').textContent = wird.description;
+        document.getElementById('hero-listen-btn').onclick = () => {
+          if (wird.audioFile) { localStorage.setItem('nooraltareeq_autoplay', wird.slug); }
+          window.location.href = '/audio.html';
+        };
+        document.getElementById('hero-read-btn').onclick = () => {
+          window.location.href = `/awrad.html#${wird.slug}`;
+        };
+      }
+    } catch(e) {
+      document.getElementById('hero-wird-text').textContent = 'اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ';
+      document.getElementById('hero-wird-description').textContent = 'نور القلوب وضياء الأرواح';
+    }
+
+    // Load latest content
+    try {
+      const [audio, videos, awrad] = await Promise.all([
+        API.get('/audio'), API.get('/videos'), API.get('/awrad')
+      ]);
+      const grid = document.getElementById('latest-grid');
+      const cards = [
+        ...(audio.slice(0,1).map(t => `
+          <a href="/audio.html" class="block p-5 bg-surface-container rounded-xl border border-outline-variant hover:border-secondary/40 transition-colors group">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary text-sm">audiotrack</span>
+              </div>
+              <span class="text-xs text-on-surface-variant px-2 py-0.5 bg-surface-container-high rounded-full">${t.category}</span>
+            </div>
+            <h3 class="font-semibold text-on-surface group-hover:text-secondary transition-colors line-clamp-2">${t.title}</h3>
+            <p class="text-xs text-on-surface-variant mt-1">${t.artist}</p>
+          </a>`)),
+        ...(videos.slice(0,1).map(v => `
+          <a href="/videos.html" class="block p-5 bg-surface-container rounded-xl border border-outline-variant hover:border-secondary/40 transition-colors group">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary text-sm">videocam</span>
+              </div>
+              <span class="text-xs text-on-surface-variant px-2 py-0.5 bg-surface-container-high rounded-full">${v.category}</span>
+            </div>
+            <h3 class="font-semibold text-on-surface group-hover:text-secondary transition-colors line-clamp-2">${v.title}</h3>
+            <p class="text-xs text-on-surface-variant mt-1">${v.duration}</p>
+          </a>`)),
+        ...(awrad.slice(0,1).map(w => `
+          <a href="/awrad.html" class="block p-5 bg-surface-container rounded-xl border border-outline-variant hover:border-secondary/40 transition-colors group">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-9 h-9 rounded-lg bg-secondary/10 flex items-center justify-center">
+                <span class="material-symbols-outlined text-secondary text-sm">menu_book</span>
+              </div>
+              <span class="text-xs text-on-surface-variant px-2 py-0.5 bg-surface-container-high rounded-full">${w.category}</span>
+            </div>
+            <h3 class="font-semibold text-on-surface group-hover:text-secondary transition-colors line-clamp-2">${w.title}</h3>
+            <p class="text-xs text-on-surface-variant mt-1">${w.duration}</p>
+          </a>`))
+      ];
+      grid.innerHTML = cards.join('') || '<p class="text-on-surface-variant col-span-3">لا يوجد محتوى بعد</p>';
+    } catch(e) { console.warn('Latest grid error', e); }
+  });
+  </script>
+</body></html>

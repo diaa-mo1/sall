@@ -1,0 +1,168 @@
+<!doctype html><html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>الفيديوهات — الطريقة البيومية الأحمدية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Serif:wght@400;700&family=Source+Serif+4:wght@400;600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <script src="/components/tailwind.config.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/components/layout.css">
+  <style>
+    #sidebar-container{min-width:256px}@media(min-width:768px){.md\:mr-64{margin-right:256px}}
+    #video-modal{transition:opacity .2s}
+    .aspect-video{aspect-ratio:16/9}
+  </style>
+</head>
+<body class="dark bg-background text-on-background custom-scrollbar" data-page="videos">
+  <div id="sidebar-container"></div>
+  <div class="md:mr-64 min-h-screen flex flex-col">
+    <main class="flex-1 p-6 md:p-10 max-w-5xl w-full mx-auto">
+
+      <div class="mb-8">
+        <h1 class="font-amiri text-4xl md:text-5xl text-secondary">مكتبة النور المرئية</h1>
+        <p class="text-on-surface-variant mt-2">مجموعة منتقاة من المحاضرات والحضرات واللقاءات الروحية.</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex flex-wrap gap-3 mb-8" id="filter-group">
+        <button data-filter="كل"       class="filter-btn active-filter px-5 py-2 rounded-full bg-secondary text-on-secondary font-medium">كل</button>
+        <button data-filter="محاضرات"  class="filter-btn px-5 py-2 rounded-full border border-outline-variant hover:border-secondary hover:text-secondary transition-all">محاضرات</button>
+        <button data-filter="حضرات"    class="filter-btn px-5 py-2 rounded-full border border-outline-variant hover:border-secondary hover:text-secondary transition-all">حضرات</button>
+        <button data-filter="مناسبات"  class="filter-btn px-5 py-2 rounded-full border border-outline-variant hover:border-secondary hover:text-secondary transition-all">مناسبات</button>
+      </div>
+
+      <!-- Featured video slot -->
+      <div id="featured-video" class="mb-8 hidden">
+        <div class="relative rounded-2xl overflow-hidden border border-secondary/30 bg-surface-container cursor-pointer group"
+             id="featured-card" onclick="openVideo(featuredItem)">
+          <div class="aspect-video bg-surface-container-high flex items-center justify-center relative" id="featured-thumb-wrap">
+            <span class="material-symbols-outlined text-8xl text-secondary/20">movie</span>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="w-20 h-20 rounded-full bg-secondary/90 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl">
+                <span class="material-symbols-outlined text-4xl text-on-secondary" style="font-variation-settings:'FILL' 1">play_arrow</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-6">
+            <span id="featured-cat" class="text-xs px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container"></span>
+            <h2 id="featured-title" class="font-amiri text-2xl text-secondary mt-3 mb-2"></h2>
+            <p id="featured-desc" class="text-on-surface-variant text-sm line-clamp-2"></p>
+            <span id="featured-dur" class="text-xs text-on-surface-variant mt-2 inline-block"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid -->
+      <div id="videos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div class="animate-pulse bg-surface-container rounded-xl h-48"></div>
+        <div class="animate-pulse bg-surface-container rounded-xl h-48"></div>
+        <div class="animate-pulse bg-surface-container rounded-xl h-48"></div>
+      </div>
+    </main>
+    <div id="footer-container"></div>
+  </div>
+  <div id="mobile-nav-container"></div>
+
+  <!-- Video Modal -->
+  <div id="video-modal" class="hidden fixed inset-0 z-50 bg-background/90 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-4xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 id="modal-video-title" class="font-amiri text-xl text-secondary truncate"></h2>
+        <button onclick="closeVideo()" class="text-on-surface-variant hover:text-on-surface p-2">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="aspect-video rounded-2xl overflow-hidden bg-surface-container-high">
+        <iframe id="modal-iframe" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+        <video id="modal-video" class="w-full h-full hidden" controls></video>
+      </div>
+    </div>
+  </div>
+
+  <script src="/components/layout.js"></script>
+  <script>
+  let allVideos = [];
+  let featuredItem = null;
+
+  function openVideo(v) {
+    document.getElementById('modal-video-title').textContent = v.title;
+    const iframe = document.getElementById('modal-iframe');
+    const video  = document.getElementById('modal-video');
+    if (v.youtubeId) {
+      iframe.src = `https://www.youtube.com/embed/${v.youtubeId}?autoplay=1`;
+      iframe.classList.remove('hidden'); video.classList.add('hidden');
+    } else if (v.videoFile) {
+      video.src = v.videoFile; video.classList.remove('hidden');
+      iframe.classList.add('hidden'); video.play();
+    }
+    document.getElementById('video-modal').classList.remove('hidden');
+  }
+  window.closeVideo = () => {
+    document.getElementById('modal-iframe').src = '';
+    document.getElementById('modal-video').pause();
+    document.getElementById('video-modal').classList.add('hidden');
+  };
+
+  function renderVideoCard(v) {
+    const thumbHTML = v.thumbnail
+      ? `<img src="${v.thumbnail}" class="w-full h-full object-cover">`
+      : `<div class="w-full h-full flex items-center justify-center"><span class="material-symbols-outlined text-5xl text-secondary/20">movie</span></div>`;
+    return `
+    <article data-category="${v.category}"
+      class="bg-surface-container rounded-2xl border border-outline-variant hover:border-secondary/40 overflow-hidden transition-colors cursor-pointer group"
+      onclick='openVideo(${JSON.stringify(v).replace(/'/g,"&#39;")})'>
+      <div class="aspect-video bg-surface-container-high relative overflow-hidden">
+        ${thumbHTML}
+        <div class="absolute inset-0 bg-background/30 group-hover:bg-background/10 transition-colors flex items-center justify-center">
+          <div class="w-14 h-14 rounded-full bg-secondary/80 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-2xl text-on-secondary" style="font-variation-settings:'FILL' 1">play_arrow</span>
+          </div>
+        </div>
+        <span class="absolute top-3 right-3 text-xs px-2 py-1 rounded-full bg-secondary-container text-on-secondary-container">${v.category}</span>
+      </div>
+      <div class="p-4">
+        <h3 class="font-semibold text-on-surface group-hover:text-secondary transition-colors line-clamp-2 mb-1">${v.title}</h3>
+        <div class="flex justify-between items-center text-xs text-on-surface-variant">
+          <span class="line-clamp-1">${v.description||''}</span>
+          ${v.duration ? `<span class="flex-shrink-0 mr-2">${v.duration}</span>` : ''}
+        </div>
+      </div>
+    </article>`;
+  }
+
+  function applyFilter(cat) {
+    const items = cat === 'كل' ? allVideos : allVideos.filter(v => v.category === cat);
+    const non = items.filter(v => !v.featured);
+    document.getElementById('videos-grid').innerHTML = non.length
+      ? non.map(renderVideoCard).join('')
+      : '<p class="text-on-surface-variant col-span-3 text-center py-8">لا توجد نتائج</p>';
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      allVideos = await API.get('/videos');
+      featuredItem = allVideos.find(v => v.featured) || allVideos[0];
+      if (featuredItem) {
+        document.getElementById('featured-video').classList.remove('hidden');
+        document.getElementById('featured-title').textContent = featuredItem.title;
+        document.getElementById('featured-desc').textContent  = featuredItem.description || '';
+        document.getElementById('featured-cat').textContent   = featuredItem.category;
+        document.getElementById('featured-dur').textContent   = featuredItem.duration || '';
+        if (featuredItem.thumbnail) {
+          document.getElementById('featured-thumb-wrap').innerHTML =
+            `<img src="${featuredItem.thumbnail}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-background/30 group-hover:bg-background/10 transition-colors flex items-center justify-center"><div class="w-20 h-20 rounded-full bg-secondary/90 flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl"><span class="material-symbols-outlined text-4xl text-on-secondary" style="font-variation-settings:'FILL' 1">play_arrow</span></div></div>`;
+        }
+      }
+      applyFilter('كل');
+    } catch(e) {
+      document.getElementById('videos-grid').innerHTML = '<p class="text-on-surface-variant">تعذر تحميل الفيديوهات</p>';
+    }
+    document.getElementById('filter-group').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn'); if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('bg-secondary','text-on-secondary'); b.classList.add('border','border-outline-variant'); });
+      btn.classList.add('bg-secondary','text-on-secondary'); btn.classList.remove('border','border-outline-variant');
+      applyFilter(btn.dataset.filter);
+    });
+  });
+  </script>
+</body></html>

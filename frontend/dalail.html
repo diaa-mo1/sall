@@ -1,0 +1,211 @@
+<!doctype html><html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>دلائل الخيرات — الطريقة البيومية الأحمدية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Serif:wght@400;700&family=Source+Serif+4:wght@400;600&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <script src="/components/tailwind.config.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/components/layout.css">
+  <style>
+    #sidebar-container{min-width:256px}@media(min-width:768px){.md\:mr-64{margin-right:256px}}
+    #dalail-reader{scroll-behavior:smooth}
+    .hizb-text{font-family:'Amiri',serif;line-height:2.4}
+  </style>
+</head>
+<body class="dark bg-background text-on-background custom-scrollbar" data-page="dalail">
+  <div id="sidebar-container"></div>
+  <div class="md:mr-64 min-h-screen flex flex-col">
+    <main class="flex-1 p-6 md:p-10 max-w-5xl w-full mx-auto pb-32">
+
+      <!-- Hero -->
+      <div class="text-center mb-10 pattern-bg rounded-2xl py-10 px-6 border border-secondary/20">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary/10 border border-secondary/30 mb-4">
+          <span class="material-symbols-outlined text-3xl text-secondary" style="font-variation-settings:'FILL' 1">auto_stories</span>
+        </div>
+        <h1 class="font-amiri text-4xl md:text-5xl text-secondary mb-3">دَلَائِلُ الْخَيْرَاتِ</h1>
+        <p class="font-amiri text-lg text-on-surface-variant">وَشَوَارِقُ الْأَنْوَارِ فِي ذِكْرِ الصَّلَاةِ عَلَى النَّبِيِّ الْمُخْتَارِ ﷺ</p>
+        <p class="text-sm text-on-surface-variant mt-2">تأليف الإمام محمد بن سليمان الجزولي رحمه الله</p>
+      </div>
+
+      <!-- Controls Bar (sticky) -->
+      <div class="sticky top-0 z-30 bg-background/95 backdrop-blur-sm border-b border-outline-variant py-3 mb-6 flex flex-wrap items-center gap-3">
+        <select id="dalail-hizb-dropdown"
+          class="flex-1 min-w-[180px] rounded-xl border border-outline-variant bg-surface-container px-4 py-2 text-sm text-on-surface focus:border-secondary outline-none">
+        </select>
+        <div class="flex items-center gap-2">
+          <button id="dalail-font-dec" title="تصغير الخط"
+            class="w-9 h-9 rounded-lg border border-outline-variant hover:border-secondary hover:text-secondary transition-colors flex items-center justify-center">
+            <span class="material-symbols-outlined text-sm">text_decrease</span>
+          </button>
+          <span id="dalail-font-size-display" class="text-xs text-on-surface-variant w-10 text-center">20px</span>
+          <button id="dalail-font-inc" title="تكبير الخط"
+            class="w-9 h-9 rounded-lg border border-outline-variant hover:border-secondary hover:text-secondary transition-colors flex items-center justify-center">
+            <span class="material-symbols-outlined text-sm">text_increase</span>
+          </button>
+        </div>
+        <button id="dalail-listen-btn"
+          class="flex items-center gap-2 px-4 py-2 bg-secondary text-on-secondary rounded-xl text-sm font-medium hover-gold-glow transition-all">
+          <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">play_circle</span>
+          استمع
+        </button>
+      </div>
+      <!-- Reading progress -->
+      <div class="w-full h-0.5 bg-surface-variant mb-8 rounded-full overflow-hidden">
+        <div id="dalail-progress-bar" class="h-full bg-secondary rounded-full transition-all" style="width:0%"></div>
+      </div>
+
+      <!-- Chapters Grid -->
+      <div id="dalail-chapters-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10"></div>
+
+      <!-- Active Reader -->
+      <div class="bg-surface-container rounded-2xl border border-outline-variant overflow-hidden">
+        <div class="flex items-center justify-between p-6 border-b border-outline-variant">
+          <h2 id="dalail-hizb-title" class="font-amiri text-2xl text-secondary">الحزب الأول</h2>
+          <div class="flex gap-2">
+            <button id="dalail-prev-btn"
+              class="flex items-center gap-1 px-4 py-2 border border-outline-variant rounded-xl text-sm hover:border-secondary hover:text-secondary transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+              <span class="material-symbols-outlined text-sm">arrow_forward</span> السابق
+            </button>
+            <button id="dalail-next-btn"
+              class="flex items-center gap-1 px-4 py-2 border border-outline-variant rounded-xl text-sm hover:border-secondary hover:text-secondary transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+              التالي <span class="material-symbols-outlined text-sm">arrow_back</span>
+            </button>
+          </div>
+        </div>
+        <div id="dalail-reader" class="p-6 md:p-10 max-h-[60vh] overflow-y-auto custom-scrollbar">
+          <div id="dalail-hizb-text" class="hizb-text text-on-surface"></div>
+        </div>
+      </div>
+    </main>
+    <div id="footer-container"></div>
+  </div>
+  <div id="mobile-nav-container"></div>
+  <audio id="app-audio" preload="metadata"></audio>
+  <div id="audio-player-bar" class="hidden fixed bottom-16 md:bottom-0 left-0 right-0 md:mr-64 bg-surface-container border-t border-secondary/40 z-30 px-4 py-3">
+    <div class="max-w-5xl mx-auto flex items-center gap-4">
+      <button id="player-prev-btn" class="text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined">skip_next</span></button>
+      <button id="player-play-btn" class="w-10 h-10 rounded-full bg-secondary text-on-secondary flex items-center justify-center hover-gold-glow">
+        <span id="player-play-icon" class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">play_arrow</span>
+      </button>
+      <button id="player-next-btn" class="text-on-surface-variant hover:text-secondary"><span class="material-symbols-outlined">skip_previous</span></button>
+      <div class="flex-1">
+        <div id="player-title" class="text-sm font-semibold truncate"></div>
+        <div class="flex items-center gap-2 mt-1">
+          <span id="player-current-time" class="text-xs text-on-surface-variant">0:00</span>
+          <div id="player-progress-container" class="flex-1 h-1.5 bg-surface-variant rounded-full cursor-pointer relative">
+            <div id="player-progress-fill" class="absolute inset-y-0 right-0 bg-secondary rounded-full" style="width:0%"></div>
+          </div>
+          <span id="player-total-time" class="text-xs text-on-surface-variant">0:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/components/layout.js"></script>
+  <script src="/components/audio-player.js"></script>
+  <script>
+  const KEYS = { hizb:'dalail_hizb', fontSize:'dalail_fontSize', progress:'dalail_progress' };
+  let ahzab = [], currentIdx = 0, fontSize = 20;
+
+  const $ = id => document.getElementById(id);
+
+  async function loadDalail() {
+    try { ahzab = await API.get('/dalail'); } catch { ahzab = []; }
+    currentIdx = parseInt(localStorage.getItem(KEYS.hizb)||'0');
+    fontSize   = parseInt(localStorage.getItem(KEYS.fontSize)||'20');
+    buildDropdown(); buildGrid(); renderHizb(currentIdx); applyFontSize();
+  }
+
+  function buildDropdown() {
+    $('dalail-hizb-dropdown').innerHTML = ahzab.map((h,i) =>
+      `<option value="${i}" ${i===currentIdx?'selected':''}>${h.title}</option>`).join('');
+    $('dalail-hizb-dropdown').onchange = e => renderHizb(parseInt(e.target.value));
+  }
+
+  function buildGrid() {
+    $('dalail-chapters-grid').innerHTML = ahzab.map((h,i) => `
+      <button onclick="renderHizb(${i})"
+        class="hizb-card text-right p-4 rounded-xl border transition-all hover:border-secondary/60 ${i===currentIdx?'border-secondary bg-primary-container gold-glow':'border-outline-variant bg-surface-container'}">
+        <div class="w-9 h-9 rounded-full border border-secondary/40 bg-secondary/10 flex items-center justify-center mb-3">
+          <span class="font-amiri text-secondary text-xs">${h.arabicNumber||h.number}</span>
+        </div>
+        <h3 class="text-sm font-semibold text-on-surface mb-1">${h.title}</h3>
+        <p class="text-xs text-on-surface-variant line-clamp-2 font-amiri">${h.preview||''}</p>
+      </button>`).join('');
+  }
+
+  function renderHizb(idx) {
+    if (idx < 0 || idx >= ahzab.length) return;
+    const h = ahzab[idx]; currentIdx = idx;
+    localStorage.setItem(KEYS.hizb, idx);
+    $('dalail-hizb-title').textContent = h.title;
+    $('dalail-hizb-dropdown').value = idx;
+    $('dalail-prev-btn').disabled = idx === 0;
+    $('dalail-next-btn').disabled = idx === ahzab.length - 1;
+
+    // Format text: بسملة بلون ذهبي، ﷺ بلون ذهبي
+    const html = (h.text||'').split('\n').filter(l=>l.trim()).map(line => {
+      const isBismillah = line.includes('بِسْمِ اللهِ') || line.includes('بسم الله');
+      const formatted   = line.replace(/ﷺ/g, '<span class="text-secondary">ﷺ</span>');
+      return isBismillah
+        ? `<p class="text-secondary text-center mb-6" style="font-size:${fontSize+6}px;line-height:1.8;font-family:'Amiri',serif">${formatted}</p>`
+        : `<p class="mb-5" style="font-size:${fontSize}px">${formatted}</p>`;
+    }).join('');
+    $('dalail-hizb-text').innerHTML = html || '<p class="text-on-surface-variant">النص غير متاح</p>';
+    $('dalail-reader').scrollTo({top:0,behavior:'smooth'});
+
+    // Update grid highlight
+    document.querySelectorAll('.hizb-card').forEach((c,i) => {
+      c.classList.toggle('border-secondary',i===idx);
+      c.classList.toggle('bg-primary-container',i===idx);
+      c.classList.toggle('gold-glow',i===idx);
+      c.classList.toggle('border-outline-variant',i!==idx);
+      c.classList.toggle('bg-surface-container',i!==idx);
+    });
+
+    // Register for audio
+    document.querySelectorAll('[data-track-id]').forEach(el => el.remove());
+    if (h.audioFile) {
+      const ghost = document.createElement('div');
+      ghost.dataset.trackId  = `hizb-${h.number}`;
+      ghost.dataset.src      = h.audioFile;
+      ghost.dataset.title    = h.title;
+      ghost.dataset.artist   = 'دلائل الخيرات';
+      ghost.dataset.duration = h.duration||'';
+      ghost.style.display    = 'none';
+      document.body.appendChild(ghost);
+      if (typeof AudioPlayer!=='undefined') AudioPlayer.init();
+    }
+  }
+
+  function applyFontSize() {
+    $('dalail-font-size-display').textContent = fontSize+'px';
+    localStorage.setItem(KEYS.fontSize, fontSize);
+  }
+
+  // Progress tracking on scroll
+  $('dalail-reader')?.addEventListener('scroll', () => {
+    const el = $('dalail-reader');
+    const pct = Math.round((el.scrollTop/(el.scrollHeight-el.clientHeight))*100)||0;
+    $('dalail-progress-bar').style.width = pct+'%';
+    try {
+      const p = JSON.parse(localStorage.getItem(KEYS.progress)||'{}');
+      const id = ahzab[currentIdx]?._id || currentIdx;
+      p[id] = Math.max(p[id]||0, pct);
+      localStorage.setItem(KEYS.progress, JSON.stringify(p));
+    } catch {}
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    loadDalail();
+    $('dalail-prev-btn').onclick = () => renderHizb(currentIdx-1);
+    $('dalail-next-btn').onclick = () => renderHizb(currentIdx+1);
+    $('dalail-font-inc').onclick = () => { fontSize = Math.min(28,fontSize+2); applyFontSize(); renderHizb(currentIdx); };
+    $('dalail-font-dec').onclick = () => { fontSize = Math.max(16,fontSize-2); applyFontSize(); renderHizb(currentIdx); };
+    $('dalail-listen-btn').onclick = () => {
+      if (typeof AudioPlayer!=='undefined') AudioPlayer.playByIndex(0);
+    };
+  });
+  </script>
+</body></html>

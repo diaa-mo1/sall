@@ -1,0 +1,76 @@
+<!doctype html><html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>تسجيل الدخول — لوحة التحكم</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <script src="/components/tailwind.config.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/components/layout.css">
+</head>
+<body class="dark bg-background text-on-background min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-sm">
+    <div class="text-center mb-8">
+      <div class="inline-flex w-16 h-16 rounded-2xl bg-secondary/10 border border-secondary/30 items-center justify-center mb-4 gold-glow">
+        <span class="material-symbols-outlined text-3xl text-secondary" style="font-variation-settings:'FILL' 1">mosque</span>
+      </div>
+      <h1 class="font-amiri text-2xl text-secondary">آل سلَّام</h1>
+      <p class="text-on-surface-variant text-sm mt-1">لوحة التحكم — الطريقة البيومية الأحمدية</p>
+    </div>
+
+    <form id="login-form" class="bg-surface-container rounded-2xl border border-outline-variant p-8 flex flex-col gap-5">
+      <div>
+        <label class="block text-sm text-on-surface-variant mb-2">اسم المستخدم</label>
+        <input id="username" type="text" value="admin" autocomplete="username"
+          class="w-full bg-background border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:border-secondary outline-none transition-colors">
+      </div>
+      <div>
+        <label class="block text-sm text-on-surface-variant mb-2">كلمة المرور</label>
+        <input id="password" type="password" value="admin123" autocomplete="current-password"
+          class="w-full bg-background border border-outline-variant rounded-xl px-4 py-3 text-on-surface focus:border-secondary outline-none transition-colors">
+      </div>
+      <div id="error-msg" class="hidden text-sm text-error bg-error-container/20 border border-error/30 rounded-xl px-4 py-3"></div>
+      <button type="submit"
+        class="w-full py-3 bg-secondary text-on-secondary rounded-xl font-semibold hover-gold-glow transition-all flex items-center justify-center gap-2">
+        <span id="btn-icon" class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">login</span>
+        <span id="btn-text">تسجيل الدخول</span>
+      </button>
+    </form>
+  </div>
+
+  <script src="/components/layout.js"></script>
+  <script>
+  // Redirect if already logged in
+  const t = localStorage.getItem('bayoumiyya_token');
+  if (t) window.location.href = '/admin/';
+
+  document.getElementById('login-form').onsubmit = async e => {
+    e.preventDefault();
+    const btn = document.querySelector('button[type=submit]');
+    const errEl = document.getElementById('error-msg');
+    errEl.classList.add('hidden');
+    document.getElementById('btn-text').textContent = 'جاري الدخول...';
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          username: document.getElementById('username').value,
+          password: document.getElementById('password').value
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error||'خطأ في الدخول');
+      localStorage.setItem('bayoumiyya_token', data.token);
+      localStorage.setItem('bayoumiyya_name',  data.name);
+      window.location.href = '/admin/';
+    } catch(err) {
+      errEl.textContent = err.message;
+      errEl.classList.remove('hidden');
+      document.getElementById('btn-text').textContent = 'تسجيل الدخول';
+      btn.disabled = false;
+    }
+  };
+  </script>
+</body></html>

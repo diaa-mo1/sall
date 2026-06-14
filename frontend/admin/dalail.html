@@ -1,0 +1,68 @@
+<!doctype html><html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>إدارة دلائل الخيرات — لوحة التحكم</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <script src="/components/tailwind.config.js"></script><script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/components/layout.css">
+  <style>#sidebar-container{min-width:256px}@media(min-width:768px){.md\:mr-64{margin-right:256px}}.ai{width:100%;background:#111412;border:1px solid #44474c;border-radius:.5rem;padding:.75rem 1rem;color:#e2e3df;outline:none}.ai:focus{border-color:#e6c364}</style>
+</head>
+<body class="dark bg-background text-on-background custom-scrollbar" data-page="admin-dalail">
+  <div id="sidebar-container" data-mode="admin"></div>
+  <div class="md:mr-64 min-h-screen p-6 md:p-10">
+    <div class="mb-8"><h1 class="font-amiri text-3xl">إدارة دلائل الخيرات</h1><p class="text-on-surface-variant text-sm mt-1">تعديل نصوص وتسجيلات الأحزاب الثمانية</p></div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="dalail-cards">
+      <div class="animate-pulse bg-surface-container rounded-xl h-32 col-span-2"></div>
+    </div>
+  </div>
+
+  <div id="form-modal" class="hidden fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-start justify-center p-4 overflow-y-auto">
+    <div class="bg-surface-container border border-outline-variant rounded-2xl w-full max-w-2xl my-8 p-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 id="form-title" class="font-amiri text-2xl text-secondary">تعديل الحزب</h2>
+        <button onclick="closeForm()"><span class="material-symbols-outlined text-on-surface-variant">close</span></button>
+      </div>
+      <form id="dalail-form" class="flex flex-col gap-4" enctype="multipart/form-data">
+        <input type="hidden" id="edit-number">
+        <div><label class="text-sm text-on-surface-variant mb-1 block">العنوان</label><input id="f-title" name="title" class="ai"></div>
+        <div><label class="text-sm text-on-surface-variant mb-1 block">مقتطف للعرض</label><input id="f-preview" name="preview" class="ai"></div>
+        <div><label class="text-sm text-on-surface-variant mb-1 block">النص الكامل</label><textarea id="f-text" name="text" rows="10" class="ai resize-none font-amiri text-lg leading-loose"></textarea></div>
+        <div><label class="text-sm text-on-surface-variant mb-1 block">المدة</label><input id="f-duration" name="duration" class="ai" placeholder="22:15"></div>
+        <div><label class="text-sm text-on-surface-variant mb-1 block">ملف الصوت (MP3)</label><input name="audioFile" type="file" accept="audio/*" class="ai file:bg-secondary file:text-on-secondary file:border-0 file:rounded-lg file:px-4 file:py-2 file:ml-2"></div>
+        <div id="form-error" class="hidden text-error text-sm bg-error-container/20 border border-error/30 rounded-xl px-4 py-3"></div>
+        <button type="submit" class="py-3 bg-secondary text-on-secondary rounded-xl font-semibold hover-gold-glow"><span id="submit-text">حفظ</span></button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/components/layout.js"></script>
+  <script>
+  const token=()=>localStorage.getItem('bayoumiyya_token');const authH=()=>({Authorization:`Bearer ${token()}`});
+  async function load(){
+    try{const d=await fetch('/api/dalail').then(r=>r.json());
+    document.getElementById('dalail-cards').innerHTML=d.map(h=>`
+      <div class="p-5 bg-surface-container rounded-2xl border border-outline-variant">
+        <div class="flex justify-between items-start mb-3">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-secondary/10 border border-secondary/30 flex items-center justify-center">
+              <span class="font-amiri text-secondary text-sm">${h.arabicNumber||h.number}</span>
+            </div>
+            <div><div class="font-semibold">${h.title}</div><div class="text-xs text-on-surface-variant">${h.duration||'مدة غير محددة'}</div></div>
+          </div>
+          <button onclick='openForm(${JSON.stringify(h).replace(/'/g,"&#39;")})' class="flex items-center gap-1 px-3 py-1.5 border border-outline-variant rounded-lg text-sm hover:border-secondary hover:text-secondary transition-colors">
+            <span class="material-symbols-outlined text-sm">edit</span> تعديل
+          </button>
+        </div>
+        <p class="text-sm text-on-surface-variant font-amiri line-clamp-2">${h.preview||''}</p>
+        ${h.audioFile?'<div class="mt-2 text-xs text-secondary flex items-center gap-1"><span class="material-symbols-outlined text-sm">check_circle</span> يوجد تسجيل صوتي</div>':'<div class="mt-2 text-xs text-on-surface-variant">لا يوجد تسجيل بعد</div>'}
+      </div>`).join('');}
+    catch(e){document.getElementById('dalail-cards').innerHTML='<p class="text-error">تعذر التحميل</p>';}
+  }
+  window.openForm=(h)=>{document.getElementById('form-title').textContent=`تعديل: ${h.title}`;document.getElementById('edit-number').value=h.number;document.getElementById('f-title').value=h.title||'';document.getElementById('f-preview').value=h.preview||'';document.getElementById('f-text').value=h.text||'';document.getElementById('f-duration').value=h.duration||'';document.getElementById('form-error').classList.add('hidden');document.getElementById('form-modal').classList.remove('hidden');};
+  window.closeForm=()=>document.getElementById('form-modal').classList.add('hidden');
+  document.getElementById('dalail-form').onsubmit=async e=>{e.preventDefault();const errEl=document.getElementById('form-error');errEl.classList.add('hidden');document.getElementById('submit-text').textContent='جاري الحفظ...';const num=document.getElementById('edit-number').value;const fd=new FormData(e.target);try{const res=await fetch(`/api/dalail/${num}`,{method:'PUT',headers:authH(),body:fd});const d=await res.json();if(!res.ok)throw new Error(d.error||'خطأ');closeForm();load();showToast('تم التعديل ✓');}catch(err){errEl.textContent=err.message;errEl.classList.remove('hidden');}document.getElementById('submit-text').textContent='حفظ';};
+  function showToast(m,t='success'){const el=document.createElement('div');el.className=`fixed top-4 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-full text-sm shadow-lg ${t==='error'?'bg-error-container text-on-error-container':'bg-secondary text-on-secondary'}`;el.textContent=m;document.body.appendChild(el);setTimeout(()=>el.remove(),3000);}
+  document.addEventListener('DOMContentLoaded',load);
+  </script>
+</body></html>
